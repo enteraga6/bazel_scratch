@@ -19,8 +19,8 @@ jobs:
             - name: Build Artifacts
               run: |
                 bazel build //...
-                #cp bazel-bin/src/{hello_dep} .
-                #cp bazel-bin/src/world/{HelloWorld} .
+                cp bazel-bin/src/{hello_dep} .
+                cp bazel-bin/src/world/{HelloWorld} .
 
             - name: Generate Provenance Subject
               id: hash
