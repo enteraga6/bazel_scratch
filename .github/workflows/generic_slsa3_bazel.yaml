@@ -62,6 +62,7 @@ jobs:
     release:
         needs: [build, provenance]
         runs-on: ubuntu-latest
+        permissions: write-all
         #if: startsWith(github.ref, 'refs/tags/')
         steps:
           - name: Download hello_dep artifact
