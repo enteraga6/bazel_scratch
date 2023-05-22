@@ -1,7 +1,9 @@
 name: Generic SLSA3 Bazel
 
-on: [workflow_dispatch]
-
+on: 
+    workflow_dispatch:
+    release:
+        types: [created]
 jobs:
     build:
         runs-on: ubuntu-latest
