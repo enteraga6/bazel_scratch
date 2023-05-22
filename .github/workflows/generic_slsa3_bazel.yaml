@@ -57,12 +57,12 @@ jobs:
         with:
             base64-subjects: "${{ needs.build.outputs.hashes }}"
             upload-assets: true # Optional: Upload to a new release
-            upload-tag-name: "v1.0.0"
+            upload-tag-name: "v1.0.1"
 
     release:
         needs: [build, provenance]
         runs-on: ubuntu-latest
-        if: startsWith(github.ref, 'refs/tags/')
+        #if: startsWith(github.ref, 'refs/tags/')
         steps:
           - name: Download hello_dep artifact
             uses: actions/download-artifact@v3
