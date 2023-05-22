@@ -1,0 +1,58 @@
+name: Generic SLSA3 Bazel
+
+on: [workflow_dispatch]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        outputs:
+            hashes: ${{steps.hash.outputs.hashes}}
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v3
+              with:
+                persist-credentials: false
+              
+            - name: Setup Bazelisk
+              uses: bazelbuild/setup-bazelisk@v2
+
+            - name: Build Artifacts
+              run: |
+                bazel build //...
+                cp bazel-bin/src/{hello_dep} .
+                cp bazel-bin/src/world/{HelloWorld} .
+
+            - name: Generate Provenance Subject
+              id: hash
+              run: |
+                set -euo pipefail
+                sha256sum hello_dep HelloWorld > checksums
+                echo "hashes=$(cat checksums | base64 -w0)" >> "${GITHUB_OUTPUT}"
+
+            - name: Upload Artifacts Part 1
+              uses: actions/upload-artifact@v3
+              with:
+                name: hello_dep
+                path: hello_dep
+                if-no-files-found: error
+                retention-days: 1
+            
+            - name: Upload Artifacts Part 2
+              uses: actions/upload-artifact@v3
+              with:
+                    name: HelloWorld
+                    path: HelloWorld
+                    if-no-files-found: error
+                    retention-days: 1
+
+    provenance:
+        needs: [build]
+        permissions:
+            actions: read
+            id-token: write
+            contents: write
+        uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@main
+        with:
+            upload=assets: true
+            base64-subjects: "${{needs.build.outputs.hashes}}"
+                   
