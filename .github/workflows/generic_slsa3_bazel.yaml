@@ -55,4 +55,5 @@ jobs:
         with:
             base64-subjects: "${{ needs.build.outputs.hashes }}"
             upload-assets: true # Optional: Upload to a new release
+            upload-tag-name: "v1.0.0"
                    
