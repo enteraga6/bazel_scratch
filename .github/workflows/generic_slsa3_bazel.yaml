@@ -42,10 +42,10 @@ jobs:
             - name: Upload Artifacts Part 2
               uses: actions/upload-artifact@v3
               with:
-                    name: HelloWorld
-                    path: HelloWorld
-                    if-no-files-found: error
-                    retention-days: 1
+                name: HelloWorld
+                path: HelloWorld
+                if-no-files-found: error
+                retention-days: 1
 
     provenance:
         needs: [build]
