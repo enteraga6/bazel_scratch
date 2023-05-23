@@ -1,0 +1,30 @@
+name: SLSA Bazel Builder
+
+permissions:
+  content: read
+  
+env:
+  GENERATED_BINARY_NAME: bazel-compiled-binary #Project at hand
+  BUILDER_DIR: internal/builders/bazel #this is fake right now, need to fork slsa-github-generator
+  BUILDER_BINARY: slsa-builder-bazel-linux-amd64 #Name of the binary in the release assets
+  
+defaults:
+  run:
+    shell: bash
+
+###################################################################
+#                                                                 #
+#            Input and output argument definitions                #
+#                                                                 #
+###################################################################
+on:
+  [workflow_call]: #Reusable workflow
+    inputs: #TODO
+    outputs:
+      bazel-binary-name:
+        description: "The name of the generated binary uploaded to the artifact registry."
+        value: ${{ jobs.build-dry.outputs.go-binary-name }}
+      bazel-provenance-name:
+        description: "The artifact name of the signed provenance. (A file with the intoto.jsonl extension)."
+        value: ${{ jobs.provenance.outputs.go-provenance-name }}
+jobs: #TODO
